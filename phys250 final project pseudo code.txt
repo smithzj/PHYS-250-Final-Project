@@ -1,0 +1,61 @@
+Need to set up drawing in a way that it is analyzable. 
+will put in an image: img
+	turn img in to black and white pixles ??
+		turn img into an array??
+		set tolerance for entries in array??
+		reassign values of array on either side of tol to be b and w??
+	make parametrization through the black pixles as time of t
+			get location of each black point??
+			make an ordering?
+			make sure path is circular (ends at beginning)
+		?? this will depend on the starting location. Could affect comparisons, so we might need to take average during testing
+
+			I need a better understanding of this param:
+				get location of each black point
+				find distance between each point in the form of an array for each point
+					i.e. black point x has an array that has the distance between itself and every other point
+				for the starting point find the minimum of its distance array(not itself.)
+					i think np.argmin will do this, but will return location in the array that is minimum 
+				find point that is minimum distance away( plug in location to distance array)
+					notice that this requires you to know intricatley how np.argmin works and cdist work
+			make 'tours':
+				active = starting point
+				run until 90% of the black pixles have been hit:
+				next = closest pixel
+				active = next
+
+Things I dont get: how to make sure that nothing is hit more than once(stop it from going baack and forth between two points)
+		   How to seperate the x and y tours- maybe record the locations that they move to seperately
+Once I do this I can use the UnivariateSplines
+	Is this too similar to the draft that I found? probablay crapp-o!
+
+	get x(t) and y(t) of the param for each coord. 
+
+Now we have two semiperiodic functions x(t) and y(t)
+
+can appy FFT for to each parametrization
+input will be: Number of terms N, function (x(t) or y(t))	
+	make this using the process you outlined in class, this is not too complicated math. 
+
+plot Fourier transform of values  to get approximation of img (appximg)
+
+make image detector:
+input(Img, appximg,  N):
+	make image array of img
+	make image array of appximg
+	make sure they are the same size
+	make img array black and white pixles
+	try a few different things to decide if they are the same:
+		if more than some tolerance of pixles are different- reject
+		if more than some tol of pixles in each are more than some distance way, reject
+		I will probably need to do some combination of this
+		also now that I think about it more, this method would take a really really long time
+
+		instead: preform a MonteCarlo? if more than some number of the ones we sample do not match or are too far, reject. 
+
+TESTING:
+Take multiple FFTs of one image with diff number of terms and plot ability of detector to accept it
+Take multiple images and preforme FFTs, as complexity increases, see how terms necessary increases.
+	This would depend on some operational definition of 'complexity' 
+Could compare the contemporary art line drawings (the kind you make in 3rd grade art class) and see how they compare under FFT approximation to scribbles. 
+
