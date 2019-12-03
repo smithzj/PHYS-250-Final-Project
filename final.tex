@@ -1,0 +1,110 @@
+\documentclass[psamsfonts]{amsart}
+
+%-------Packages---------
+\usepackage{amssymb,amsfonts}
+\usepackage[all,arc]{xy}
+\usepackage{enumerate}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+%--------Theorem Environments--------
+%theoremstyle{plain} --- default
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{quest}[thm]{Question}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{defns}[thm]{Definitions}
+\newtheorem{con}[thm]{Construction}
+\newtheorem{exmp}[thm]{Example}
+\newtheorem{exmps}[thm]{Examples}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{notns}[thm]{Notations}
+\newtheorem{addm}[thm]{Addendum}
+\newtheorem{exer}[thm]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{rems}[thm]{Remarks}
+\newtheorem{warn}[thm]{Warning}
+\newtheorem{sch}[thm]{Scholium}
+
+\makeatletter
+\let\c@equation\c@thm
+\makeatother
+\numberwithin{equation}{section}
+
+\bibliographystyle{plain}
+
+%--------Meta Data: Fill in your info------
+\title{Gamma-Cross Sections} 
+
+\author{Zo\"e Smith}
+
+
+\date{DEADLINES: Draft AUGUST 19 and Final version AUGUST 31, 2019}
+
+\begin{document}
+\begin{center}
+	{\bfseries The Mass of a Neutron}\\
+	Zo\"e Smith
+\end{center}
+
+ \section{Statement of Research Problem/ Rationale}
+ The question that I will be investigating is: How can we model 2D images using Fourier transforms, and at what number of terms will our approximation be the best?
+ 
+ This question has many applications in many different disciplines. For example, two dimensional Fourier transforms can be used in a variety of fields, from animation, and signal detection to medical imagery and quantum mechanics. 	
+ In particular, discrete Fourier transforms(DFTs) are essential to computationally evaluating periodic functions that are not analytically(??) solvable. This is very important in digital signal detection.
+
+Objectives: We will have succeeded if the discrete fourier transform can succesfully model a 2D image, and we have verified the Fourier transform equation. 
+
+
+ \section{Literature Review/Background Theory}
+Fourier transforms were first formalized by Joseph Fourier in his work The Analytical Theory of Heat in 1822. This paper depended upon the use of periodic functions as a base for analytic equations. 
+
+In this paper, I am indebted to Alex Miller's article `A Tale of Math $\&$ Art: Creating the Fourier Series Harmonic Circles Visualization'[1] and his corresponding GitHub repository[2]. I relied on this repository to help make the parametrization of the picture. I also found Jezzamons article 'An Interactive Introduction to Fourier Transforms'[3] very helpful and exciting. 
+
+%[1] https://alex.miller.im/posts/fourier-series-spinning-circles-visualization/
+%[2] https://github.com/alexmill/website_notebooks/blob/master/fourier-spinning-circles.ipynb
+%[3] http://www.jezzamon.com/fourier/index.html
+ 
+ 
+ \section{Methods (Explanation/Appropriateness)}
+In this experiment, I created a parametrization of our desired picture with two dimensional Fourier transforms instead of comparing the original picture to the Fourier transform. This simulation was done because the parametrization I generated was not a good enough match to effectively be compared with the Fourier approximations. Instead, we chose to compare the Fourier approximations to the photo they were actively approximating (the parametrization) instead of the photo that they were a secondary approximation of. 
+
+First, to create the approximation of the photo I made a path through each of the black pixels, the approximated this path for both the x and y dimensions by using the SciPy function Univariate Splines. Splines are linear approximations to curves. The Univariate spline created a parametrization through the image that could be mapped against a single variable, which we will consider to be `time.' At this point, the parametrization was set against a time scale. The length of the parametrizaition- the 'Period' of our parametrization- was fixed by the number of black pixels in the original image. The time step however is controlled by the number of evaluations that we made. Increasing the number of evaluations would linearly decrease the time step. 
+
+Once the parametrization was made for both $x(t)$ and $y(t)$, I needed to take the DFTs of each. I used the equations \begin{equation}\label{ft}
+f(t) = \sum_{n=0}^N c_ne^{\frac{i2\pi nt}{T}}
+\end{equation}
+where $T$ is the period of our function, $N$ is the number of terms we are evaluating, and $c_n$ is computed to be 
+\begin{equation}\label{cn}
+c_n = \frac{1}{m} \sum_{t=0}^T f(t)e^{{-i2\pi nt}{T}}
+\end{equation}
+where $m$ is the number of intervals we have sampled in one period. Note that the sum counts from $t=0$ to $T$ with a step size of $\frac{T}{m}$. Equation \ref{cn} is our Discrete Fourier transform, where we have approximated an integral by a $m$ Riemann sums. This DFT gives us the amplitudes of both $x(t)$ and $y(t)$ in frequency space. I took the inverse of this DFT to return to position space. In this experiment, I varied the amount of terms used to calculate the inverse DFT in equation\ref{ft}. The theory of Fourier transforms by evaluating $m$ terms we should have the best approximation- a result that I will test.  
+It is interesting to note that since I applied the Fourier transform to both the $x$ and the $y$ dimensions, I am acctually calculating twice the number of Fourier transforms. 
+The astute observer will realize that Fourier transforms can only be applied to periodic functions. In this project I considered the one period to one `lap' around all the black pixels. Our parametrization makes this possible. To improve the periocidity of $x(t)$ and $y(t)$, I ensured that they ended and began at the same spot. ??? has done further research on the impact of this assumption[?]
+ 
+Finally to judge the similarity of the parametrized image to each approximation of the parametrized image, I calculated the precent number of pixels that are the same between the two images. These raw precentage can be compared with relative certainty(formalize???) between parametrizations evaluated at different values of $m$, but should not be attempted between two completely different images, since the amount of white `buffer' pixiles around the edge will be different for each type of image and will always agree for images and their approximation. 
+ 
+I chose to use the parametrization to first approximate the target image because it allowed me to run DFt's in both dimensions and strengthen the periodicity of our image as described above. I chose to use the Discrete Fourier transform instead of the Fast Fourier transform(FFT) because of the easier manipulation of the number of terms to calculate in the Fourier transform, but I would be interested to speed up the process using an FFT. The method for comparing the parametrized image to the approximations was chosen for a few reasons. To start, the Fourier approximation keeps the black pixles in the optimal orientation so that we can be relatively certain we are not underestimating the images similarities. Secondly, it was the most direct way to compare the relative similarity between the Fourier approximations and te parametrized image as a function of terms- simply comparing the black pixles of the one to another would ignore the fact that each image does not have the same number of black pixels.
+
+ Methods are appropriate to address aim/question:
+ 	 I compaired the parametrization, not the original picture because the parametrization is not perfect, also cant figure out how to get them to be centered on the same basis. This is ok because the picture is now just our picture, however, by improving the parametrization we can match our original photo more.
+ 	
+
+ 
+ \section{Analysis/Results}
+ 	What figures will I include:
+ 	for two or three photos:
+ 	include original photo, parametrization,
+ 	examples of early, good, and over fit fourier terms
+ 	plots of spectrums for 500 samples, 1000 samples
+ 	what if we plotted rate of growth?
+ \section{Conclusion/Discussion}
+ 
+\end{document}
