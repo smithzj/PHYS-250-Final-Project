@@ -55,7 +55,7 @@
 \end{center}
 
  \section{Statement}
- In this project I investigated was how the does increasing the number of terms calculated in an iDFT while keeping the number evaluations in a Discrete Fourier Transform (DFT) impact the accuracy of an approximation of an image. 
+ In this project I investigated was how the does increasing the number of terms calculated in an iDFT while keeping the increment of evaluations in a Discrete Fourier Transform (DFT) impact the accuracy of an approximation of an image. 
  
  There are many applications to this project. Too start, approximations by Fourier transforms are very common in signal processing done in communications. Fourier transformations are also common in JPEGs, which use Fourier Transforms in both dimensions of the image to store it. From an artistic viewpoint, modeling images by Fourier transforms allow us a means to visualize and quantize abstraction. Fourier Transforms of images via parametrizations are also very common in animations, so understanding the mechanisms behind these animations is also incredibly valuable. 
  \section{Project Objective}:
@@ -83,7 +83,7 @@ First, a black and white line drawing was chosen. For this experiment I chose a 
 
 
  All images were handled in this experiment in python as NumPy arrays. A path through the black pixels(indicated by `0' in NumPY arrays). Some manipulation was necessary to ensure that the imported image was strictly black and white and not gray-scale or RBG. The path was set to start and end at the same spot- a feature that would be useful for the Fourier transforms. From this path, SciPy's Univariate Splines function was used to create a parametrization. Univariate Splines approximate the curved path by a lines at increments. The period of our parametrization was fixed by the number of black pixels, `T', in our array. The time step was chosen by setting a number of evaluations- `m.' The Univariate Splines function was used in both the $x$ and $y$ dimensions to get parametrizations $x(t)$ and $y(t)$. 
-This parametrization can be plotted to get our `base image' that we will compare our approximations to.  The parametrization shown at step size 250 is shown in figure 2. 
+This parametrization can be plotted with Matplotlib to get our `base image' that we will compare our approximations to.  The parametrization shown at step size 250 is shown in figure 2. 
 
 \begin{figure}[h!]
 	\centering
@@ -131,7 +131,7 @@ In this experiment we took the spectra of the DFTs at 250, 500, 750, and 1000 ev
 \end{figure}
 
 
- I found that the most maximum relative maximums were found within $\pm 2$ terms of every odd multiple of $m$, while there was a patterned oscillation between these values. The relative maxima over the first four periods increases over each period. I estimated the uncertainty in the peaks by considering the growth of the spectra at those points. I optimized a linear fit using the least squares method and found the slope to be $5.5\pm0.9\times 10^{-4}$\%/terms calculated, or when converted to units of $m$,   $0.14 \pm 0.02$ \%/m.This plot is shown in figure 6.
+ I found that the most maximum relative maximums were found within $\pm 2$ terms of every odd multiple of $m$, while there was a patterned oscillation between these values. The relative maxima over the first four periods increases over each period. I estimated the uncertainty in the peaks by considering the growth of the spectra at those points. Using SciPy optimize, I optimized a linear fit using the least squares method and found the slope to be $5.5\pm0.9\times 10^{-4}$\%/terms calculated, or when converted to units of $m$,   $0.14 \pm 0.02$ \%/m.This plot is shown in figure 6.
  \begin{figure}[h!]
  	\centering
  	\includegraphics[scale=.4]{girl_250_firstfour.png}
